@@ -1,6 +1,6 @@
 # qa-automation-portfolio
 
-![Tests](https://github.com/ZarshaB/qa-automation-framework/actions/workflows/run-tests.yml/badge.svg)
+![Tests](https://github.com/ZarshaB/qa-automation-framework/actions/workflows/ci.yml/badge.svg)
 
 > Selenium (Python) automation framework built using Page Object Model pattern and pytest. Tests run automatically on every push via GitHub Actions CI/CD.
 
