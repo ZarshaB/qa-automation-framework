@@ -1,0 +1,42 @@
+name: QA Framework CI
+
+on: [push, pull_request]
+
+jobs:
+  api-tests:
+    name: API Tests (fast)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run API tests
+        run: pytest -m api -v
+
+  bdd-and-ui-tests:
+    name: BDD + Selenium UI Tests
+    runs-on: ubuntu-latest
+    needs: api-tests
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Run BDD and UI tests
+        run: pytest -m "bdd or ui" -v
+        env:
+          TEST_ENV: ci

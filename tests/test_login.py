@@ -22,6 +22,7 @@ from pages.login_page import LoginPage  # Import our Page Object
 # TEST 1: Successful Login
 # SCENARIO: Valid username and password → user lands on products page
 # ============================================================
+@pytest.mark.ui
 def test_successful_login(driver):
     """
     GIVEN I am on the saucedemo login page
@@ -52,6 +53,7 @@ def test_successful_login(driver):
 # TEST 2: Login with Wrong Password
 # SCENARIO: Valid username but wrong password → error message appears
 # ============================================================
+@pytest.mark.ui
 def test_login_with_wrong_password(driver):
     """
     GIVEN I am on the saucedemo login page
@@ -84,6 +86,7 @@ def test_login_with_wrong_password(driver):
 # TEST 3: Login with Locked Out User
 # SCENARIO: Locked account → specific error message appears
 # ============================================================
+@pytest.mark.ui
 def test_locked_out_user(driver):
     """
     GIVEN I am on the saucedemo login page
@@ -113,6 +116,7 @@ def test_locked_out_user(driver):
 # TEST 4: Login with Empty Fields
 # SCENARIO: Submit with no username or password → error message appears
 # ============================================================
+@pytest.mark.ui
 def test_login_with_empty_fields(driver):
     """
     GIVEN I am on the saucedemo login page
@@ -144,6 +148,7 @@ def test_login_with_empty_fields(driver):
 # Run the same test with multiple sets of data in one go.
 # This is a more advanced pytest feature — shows you know pytest well.
 # ============================================================
+@pytest.mark.ui
 @pytest.mark.parametrize("username, password, expected_error", [
     ("",              "secret_sauce",  "Username is required"),
     ("standard_user", "",             "Password is required"),
