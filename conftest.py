@@ -11,8 +11,10 @@
 # and closing the browser inside each test file, we do it ONCE
 # here and share it across all tests.
 # ============================================================
+import os
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -31,15 +33,39 @@ def driver():
     3. Closes the browser after each test finishes (even if the test fails)
     Any test that has 'driver' as a parameter will automatically
     use this fixture. You'll see this in the test file.
+
+    CI vs LOCAL:
+    GitHub Actions runners have no display (no screen), so Chrome must
+    run in "headless" mode there, with a couple of extra flags
+    (--no-sandbox, --disable-dev-shm-usage) that Chrome needs to start
+    up cleanly inside a container. Locally on your Mac, none of this
+    is needed - you'll still see the actual browser window as before.
+
+    GitHub Actions automatically sets an environment variable CI=true
+    on every run, so we use that to detect where we're running.
     """
     print("\n🌐 Opening Chrome browser...")
+
+    options = Options()
+
+    is_ci = os.getenv("CI", "false").lower() == "true"
+    if is_ci:
+        options.add_argument("--headless=new")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--window-size=1920,1080")
+
     # ChromeDriverManager automatically downloads the correct
     # version of ChromeDriver for your Chrome browser.
     # You don't need to download anything manually.
     service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service)
+    driver = webdriver.Chrome(service=service, options=options)
+
     # Maximise the browser window so elements are fully visible
-    driver.maximize_window()
+    # (skipped in headless CI mode since --window-size handles it there)
+    if not is_ci:
+        driver.maximize_window()
+
     # 'yield' means: "pause here, run the test, then come back"
     # Everything ABOVE yield = setup (runs before the test)
     # Everything BELOW yield = teardown (runs after the test)
