@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# PyCharm
+.idea/
+
+# macOS
+.DS_Store
+
+# Node / Cypress (if you keep the cypress folder in this repo)
+node_modules/
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Test artifacts
+*-results.xml
+allure-results/
